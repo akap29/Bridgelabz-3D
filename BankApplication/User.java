@@ -1,13 +1,13 @@
 package BankApplication;
 
-abstract class Account implements IBankOperations {
+abstract class User implements IBankOperations {
     private static long accountCounter = 1000;
     private final long accountNumber;
     private final String name;
     private final String password;
     protected double balance;
 
-    public Account(String name, String password, double initialDeposit) {
+    public User(String name, String password, double initialDeposit) {
         this.accountNumber = ++accountCounter;
         this.name = name;
         this.password = password;

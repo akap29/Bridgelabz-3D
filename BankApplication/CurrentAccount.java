@@ -1,6 +1,6 @@
 package BankApplication;
 
-class CurrentAccount extends Account {
+class CurrentAccount extends User {
     public CurrentAccount(String name, String password, double initialDeposit) {
         super(name, password, initialDeposit);
     }
@@ -17,7 +17,7 @@ class CurrentAccount extends Account {
 
     @Override
     public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance + 5000) { // overdraft allowed
+        if (amount > 0 && amount <= balance + 5000) { 
             balance -= amount;
             System.out.println("₹" + amount + " withdrawn successfully.");
         } else {

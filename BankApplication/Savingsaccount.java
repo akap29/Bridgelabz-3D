@@ -1,6 +1,6 @@
 package BankApplication;
 
-class SavingsAccount extends Account {
+class SavingsAccount extends User {
     public SavingsAccount(String name, String password, double initialDeposit) {
         super(name, password, initialDeposit);
     }

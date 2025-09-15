@@ -1,15 +1,15 @@
 package BankApplication;
 import java.util.*;
+
 public class Main {
     private static Scanner sc = new Scanner(System.in);
-    private static Map<Long, Account> accounts = new HashMap<>();
-    private static Account loggedInUser = null;
+    private static Map<String, User> accounts = new HashMap<>(); // login by username
+    private static User loggedInUser = null;
 
     public static void main(String[] args) {
         while (true) {
             if (loggedInUser == null) {
-                // Only show signup/login when no one is logged in
-                System.out.println("\n====== Bank System ======");
+                System.out.println("\n====== SBI Bank System ======");
                 System.out.println("1. Sign Up");
                 System.out.println("2. Login");
                 System.out.println("3. Exit");
@@ -18,11 +18,7 @@ public class Main {
                 sc.nextLine();
 
                 switch (choice) {
-                    case 1 -> {
-                        signUp();
-                        // After signup, auto-login
-                        accountMenu();
-                    }
+                    case 1 -> signUp();
                     case 2 -> login();
                     case 3 -> {
                         System.out.println("Thank you for using our Bank!");
@@ -31,15 +27,19 @@ public class Main {
                     default -> System.out.println("Invalid choice.");
                 }
             } else {
-                // If already logged in → show account menu directly
                 accountMenu();
             }
         }
     }
 
     private static void signUp() {
-        System.out.print("Enter your Name: ");
+        System.out.print("Enter your Username: ");
         String name = sc.nextLine();
+
+        if (accounts.containsKey(name)) {
+            System.out.println("Username already exists. Please choose a different one.");
+            return;
+        }
 
         System.out.print("Set your Password: ");
         String password = sc.nextLine();
@@ -54,7 +54,7 @@ public class Main {
         int type = sc.nextInt();
         sc.nextLine();
 
-        Account newAcc;
+        User newAcc;
         if (type == 1) {
             newAcc = new SavingsAccount(name, password, deposit);
         } else if (type == 2) {
@@ -64,51 +64,31 @@ public class Main {
             return;
         }
 
-        accounts.put(newAcc.getAccountNumber(), newAcc);
-        loggedInUser = newAcc; // Auto login after signup
+        accounts.put(name, newAcc);
+        loggedInUser = newAcc;
 
         System.out.println("\nAccount Created Successfully!");
+        System.out.println("Username: " + newAcc.getName());
         System.out.println("Account Number: " + newAcc.getAccountNumber());
         System.out.println("Account Type: " + newAcc.getAccountType());
-
-        // Immediately ask for transactions
-        System.out.print("\nDo you want to deposit money now? (yes/no): ");
-        String depChoice = sc.nextLine();
-        if (depChoice.equalsIgnoreCase("yes")) {
-            System.out.print("Enter deposit amount: ");
-            double dep = sc.nextDouble();
-            sc.nextLine();
-            newAcc.deposit(dep);
-        }
-
-        System.out.print("\nDo you want to withdraw money now? (yes/no): ");
-        String wdChoice = sc.nextLine();
-        if (wdChoice.equalsIgnoreCase("yes")) {
-            System.out.print("Enter withdrawal amount: ");
-            double wd = sc.nextDouble();
-            sc.nextLine();
-            newAcc.withdraw(wd);
-        }
-
-        System.out.println("Final Balance: Rs" + newAcc.getBalance());
+        System.out.println("Initial Balance: Rs" + newAcc.getBalance());
     }
 
     private static void login() {
-        System.out.print("Enter Account Number: ");
-        long accNum = sc.nextLong();
-        sc.nextLine();
+        System.out.print("Enter Username: ");
+        String user = sc.nextLine();
 
         System.out.print("Enter Password: ");
         String pass = sc.nextLine();
 
-        Account acc = accounts.get(accNum);
+        User acc = accounts.get(user);
 
         if (acc != null && acc.validatePassword(pass)) {
             loggedInUser = acc;
             System.out.println("\nWelcome, " + acc.getName() + "! (" + acc.getAccountType() + ")");
             accountMenu();
         } else {
-            System.out.println("Invalid account number or password.");
+            System.out.println("Invalid username or password.");
         }
     }
 
@@ -136,7 +116,7 @@ public class Main {
                 }
                 case 4 -> {
                     System.out.println("Logged out successfully.");
-                    loggedInUser = null; // back to signup/login
+                    loggedInUser = null;
                     return;
                 }
                 default -> System.out.println("Invalid choice.");
