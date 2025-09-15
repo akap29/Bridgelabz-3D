@@ -1,0 +1,16 @@
+package Inheritance.AnimalHierarchy;
+import java.util.*;
+
+public class Animal {
+    String name;
+    int age;
+
+    Animal(String name, int age){
+        this.name= name;
+        this.age= age;
+    }
+
+    public void makeSound(){
+        System.out.println("Animal makes a sound.");
+    }
+}
