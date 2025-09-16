@@ -1,5 +1,4 @@
 package Inheritance.AnimalHierarchy;
-import java.util.*;
 
 public class Animal {
     String name;
