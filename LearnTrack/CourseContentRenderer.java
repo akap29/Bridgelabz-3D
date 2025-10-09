@@ -1,5 +1,8 @@
 package LearnTrack;
 
-public class CourseContentRenderer {
-    
+public interface CourseContentRenderer {
+    void renderContent(String content);
 }
+
+
+
